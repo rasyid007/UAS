@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <title>Document</title>
+</head>
+<body>
+    <h2>Pemesanan Tiket Maskapai</h2>
+<form id="form">
+Nama Pemesan : <input type="text" name="nama" id="nama"><br><br>
+Jumlah Tiket : <input type="text" name="Jumlah Tiket" id="Jumlah Tiket"><br><br>
+
+Kelas : <select name="Kelas" id="Kelas">
+    <option value="Ekonomi">Ekonomi</option>
+    <option value="Bisnis">Bisnis</option>
+    <option value="Eksekutif">Eksekutif</option>
+</select><br><br>
+
+Tujuan : <select name="Tujuan" id="Tujuan">
+    <option value="Bali">Bali</option>
+</select><br><br>
+
+Bagasi : <input type="radio" checked name="Bagasi" value="5kg">5kg
+<input type="radio" name="Bagasi" Value="10Kg">10Kg
+<input type="radio" name="Bagasi" value="15Kg">15KG<br><br>
+
+Ansuransi : <input type="checkbox" checked name="Ansuransi" value="Ansuransi Jiwa">Ansuransi Jiwa
+<input type="checkbox" name="Ansuransi" value="Ansuransi Kecelakaan">Ansuransi Kecelakaan 
+<input type="checkbox" name="Ansuransi" value="Ansuransi Keterlambatan">Ansuransi Keterlambatan<br><br>
+
+<button type="submit" id="formSubmit">Simpan</button>
+<button type="reset" >batal</button>
+
+</form>
+
+</body>
+</html>
+
+<script>
+    document.getElementById("formSubmit").addEventListener( "click", (e)=> {
+            e.preventDefault();
+            // Format Rupiah
+            const formatRupiah = (money) => {
+                return new Intl.NumberFormat('id-ID',
+                    { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }
+                ).format(money);
+            }
+
+            // Logic Name
+            var name = document.getElementById("nama").value;
+            document.getElementById("nama").innerHTML = nama;
+
+            // Logic Tiket
+            var jml_tiket = document.getElementById("Jumlah Tiket").value;
+            var diskon = 0;
+            if(jml_tiket > 3) diskon = 30 / 100
+            document.getElementById("Jumlah Tiket").innerHTML = Jumlah Tiket;
+
+            // Logic Kelas
+            var kelas = document.getElementById("kelas").value;
+            var harga = 0;
+            if(kelas == "eko"){
+                kelas = "Ekonomi (Air Mineral)"
+                harga = 1000000
+            }else if(kelas == "bis") {
+                kelas = "Bisnis (Snack)"
+                harga = 2000000;
+            }else if(kelas == "eks") {
+                kelas = "Eksekutif (Makanan)"
+                harga = 3000000;
+            }
+            document.getElementById("kelas").innerHTML = kelas;
+            
+            // Logic Tujuan
+            let tujuan = document.getElementById("tujuan").value;
+            document.getElementById("Tujuan").innerHTML = tujuan;
+            
+            // Logic Bagasi
+            var bagasi = document.querySelector('input[name="bagasi"]:checked').value;
+            var biayaBagasi = 0;
+            if(bagasi == "5kg") biayaBagasi = 100000;
+            else if(bagasi == "10kg") biayaBagasi = 150000;
+            else if(bagasi == "15kg") biayaBagasi = 200000;
+            document.getElementById("Bagasi").innerHTML = `${Bagasi} (${formatRupiah(biayaBagasi)})`;
+
+            // Logic Asuransi
+            var asuransi = document.querySelectorAll('input[name="asuransi"]:checked');
+            var txt_asuransi = "";
+            var i, biayaAsuransi;
+            for ( i = 0; i < asuransi.length; i++)
+                if (asuransi[i].checked) txt_asuransi += asuransi[i].value + ", <br>";
+            biayaAsuransi = i*50000
+            document.getElementById("Ansuransi").innerHTML = `${txt_asuransi} (${formatRupiah(biayaAsuransi)})`;
+
+
+            // Logic Total Harga
+            let total_harga = harga * jml_tiket - (diskon) + biayaBagasi + biayaAsuransi
+            document.getElementById("txt_total_harga").innerHTML = formatRupiah(total_harga);
+
+            // Validasi Simple
+            if(name.trim() == "" || jml_tiket.trim() == "") {
+                if(name.trim() == "") {
+                    document.getElementById("nama").innerHTML = "Isi Kolom Nama Terlebih dahulu !"
+                    document.querySelector(".toggle-data").style.display = "none"
+                }else {
+                    document.getElementById("Jumlah Tiket").innerHTML = "Isi Kolom Jumlah Tiket Terlebih dahulu !"
+                    document.querySelector(".toggle-data").style.display = "none"
+                }
+            }else {
+                if(name.trim() == "") {
+                    document.getElementById("nama").innerHTML = ""
+                    document.querySelector(".toggle-data").style.display = "block"
+                }else {
+                    document.getElementById("Jumlah Tiket").innerHTML = ""
+                    document.querySelector(".toggle-data").style.display = "block"           
+                }
+            }
+        });
+    }
+</script>
